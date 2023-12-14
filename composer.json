@@ -22,7 +22,7 @@
         "docs": "https://socialiteproviders.com/microsoft-azure"
     },
     "require": {
-        "php": "^8.0",
+        "php": "^7.4",
         "ext-json": "*",
         "socialiteproviders/manager": "^4.4"
     },
