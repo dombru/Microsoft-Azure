@@ -119,7 +119,7 @@ class Provider extends AbstractProvider
             'officeLocation'    => Arr::get($user, 'officeLocation'),
             'preferredLanguage' => Arr::get($user, 'preferredLanguage'),
             'surname'           => Arr::get($user, 'surname'),
-        ])->mapExtra($this->getConfig('extra_mappings', []));
+        ])->mapExtraFields($user, $this->getConfig('extra_mappings', []));
     }
 
     /**

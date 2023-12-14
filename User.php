@@ -2,6 +2,7 @@
 
 namespace SocialiteProviders\Azure;
 
+use Illuminate\Support\Arr;
 use SocialiteProviders\Manager\OAuth2\User as oAuth2User;
 
 class User extends oAuth2User
@@ -40,10 +41,11 @@ class User extends oAuth2User
         return $this->mail;
     }
 
-    public function mapExtra(array $mappings)
+    public function mapExtraFields(array $user, array $mappings)
     {
-        foreach ($mappings as $key => $mapper) {
-
+        foreach ($mappings as $mapper) {
+            list($key, $path) = explode(':', $mapper);
+            $this->attributes[$key] = Arr::get($user, $path);
         }
     }
 }
