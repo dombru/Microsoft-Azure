@@ -17,6 +17,13 @@ class Provider extends AbstractProvider
     protected $graphUrl = 'https://graph.microsoft.com/v1.0/me';
 
     /**
+     * Default field list to request from Microsoft.
+     *
+     * @see https://docs.microsoft.com/en-us/graph/permissions-reference#user-permissions
+     */
+    protected const DEFAULT_FIELDS = ['id', 'displayName', 'businessPhones', 'givenName', 'jobTitle', 'mail', 'mobilePhone', 'officeLocation', 'preferredLanguage', 'surname', 'userPrincipalName'];
+
+    /**
      * {@inheritdoc}
      */
     protected $scopeSeparator = ' ';
@@ -73,13 +80,19 @@ class Provider extends AbstractProvider
      */
     protected function getUserByToken($token)
     {
-        $response = $this->getHttpClient()->get($this->graphUrl, [
+        $requestOptions = [
             RequestOptions::HEADERS => [
                 'Accept'        => 'application/json',
                 'Authorization' => 'Bearer '.$token,
             ],
             RequestOptions::PROXY => $this->getConfig('proxy'),
-        ]);
+        ];
+        if ($this->getConfig('extra_fields', false)) {
+            $requestOptions[RequestOptions::QUERY] = [
+                '$select' => array_merge(self::DEFAULT_FIELDS, $this->getConfig('extra_fields', [])),
+            ];
+        }
+        $response = $this->getHttpClient()->get($this->graphUrl, $requestOptions);
 
         return json_decode((string) $response->getBody(), true);
     }
@@ -97,7 +110,16 @@ class Provider extends AbstractProvider
             'principalName' => $user['userPrincipalName'],
             'mail'          => $user['mail'],
             'avatar'        => null,
-        ]);
+
+            'businessPhones'    => Arr::get($user, 'businessPhones'),
+            'displayName'       => Arr::get($user, 'displayName'),
+            'givenName'         => Arr::get($user, 'givenName'),
+            'jobTitle'          => Arr::get($user, 'jobTitle'),
+            'mobilePhone'       => Arr::get($user, 'mobilePhone'),
+            'officeLocation'    => Arr::get($user, 'officeLocation'),
+            'preferredLanguage' => Arr::get($user, 'preferredLanguage'),
+            'surname'           => Arr::get($user, 'surname'),
+        ])->mapExtra($this->getConfig('extra_mappings', []));
     }
 
     /**
@@ -130,6 +152,6 @@ class Provider extends AbstractProvider
      */
     public static function additionalConfigKeys()
     {
-        return ['tenant', 'proxy'];
+        return ['tenant', 'proxy', 'extra_fields', 'extra_mappings'];
     }
 }

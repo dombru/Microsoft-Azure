@@ -39,4 +39,11 @@ class User extends oAuth2User
     {
         return $this->mail;
     }
+
+    public function mapExtra(array $mappings)
+    {
+        foreach ($mappings as $key => $mapper) {
+
+        }
+    }
 }
