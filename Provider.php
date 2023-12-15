@@ -3,6 +3,7 @@
 namespace SocialiteProviders\Azure;
 
 use GuzzleHttp\RequestOptions;
+use Illuminate\Support\Arr;
 use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 
 class Provider extends AbstractProvider
