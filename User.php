@@ -47,5 +47,7 @@ class User extends oAuth2User
             list($key, $path) = explode(':', $mapper);
             $this->attributes[$key] = Arr::get($user, $path);
         }
+
+        return $this;
     }
 }
