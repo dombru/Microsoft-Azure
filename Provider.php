@@ -90,7 +90,7 @@ class Provider extends AbstractProvider
         ];
         if ($this->getConfig('extra_fields', false)) {
             $requestOptions[RequestOptions::QUERY] = [
-                '$select' => array_merge(self::DEFAULT_FIELDS, $this->getConfig('extra_fields', [])),
+                '$select' => join(',', array_merge(self::DEFAULT_FIELDS, $this->getConfig('extra_fields', []))),
             ];
         }
         $response = $this->getHttpClient()->get($this->graphUrl, $requestOptions);
