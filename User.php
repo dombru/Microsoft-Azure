@@ -44,8 +44,10 @@ class User extends oAuth2User
     public function mapExtraFields(array $user, array $mappings)
     {
         foreach ($mappings as $mapper) {
-            list($key, $path) = explode(':', $mapper);
-            $this->attributes[$key] = Arr::get($user, $path);
+            if (strpos($mapper, ':') !== false) {
+                list($key, $path) = explode(':', $mapper);
+                $this->attributes[$key] = Arr::get($user, $path);
+            }
         }
 
         return $this;
