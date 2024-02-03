@@ -161,8 +161,9 @@ class Provider extends AbstractProvider
         $fields = parent::getCodeFields($state);
 
         // adapt fields to ZHdK
-        if($this->getConfig('response_type', false))
-        $fields['response_type'] = $this->getConfig('response_type');
+        if($this->getConfig('response_type', false)) {
+            $fields['response_type'] = $this->getConfig('response_type');
+        }
 
         return $fields;
     }
