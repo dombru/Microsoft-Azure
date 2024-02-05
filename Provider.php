@@ -153,11 +153,14 @@ class Provider extends AbstractProvider
      */
     public static function additionalConfigKeys()
     {
-        return ['tenant', 'proxy', 'extra_fields', 'extra_mappings', 'response_type'];
+        return ['tenant', 'proxy', 'extra_fields', 'extra_mappings', 'response_type', 'scopes'];
     }
 
     protected function getCodeFields($state = null)
     {
+        if($this->getConfig('scopes', false)) {
+            $this->setScopes($this->getConfig('scopes'));
+        }
         $fields = parent::getCodeFields($state);
 
         // adapt fields to ZHdK
