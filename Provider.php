@@ -4,6 +4,7 @@ namespace SocialiteProviders\Azure;
 
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 
 class Provider extends AbstractProvider
@@ -153,7 +154,8 @@ class Provider extends AbstractProvider
      */
     public static function additionalConfigKeys()
     {
-        return ['tenant', 'proxy', 'extra_fields', 'extra_mappings', 'response_type', 'scopes'];
+        return ['tenant', 'proxy', 'extra_fields', 'extra_mappings',
+            'response_type', 'scopes', 'response_mode', 'use_nonce'];
     }
 
     protected function getCodeFields($state = null)
@@ -166,6 +168,12 @@ class Provider extends AbstractProvider
         // adapt fields to ZHdK
         if($this->getConfig('response_type', false)) {
             $fields['response_type'] = $this->getConfig('response_type');
+        }
+        if($this->getConfig('response_mode', false)) {
+            $fields['response_mode'] = $this->getConfig('response_mode');
+        }
+        if($this->getConfig('use_nonce', false)) {
+            $fields['nonce'] = Str::random();
         }
 
         return $fields;
